@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="/fragments/head :: head">
+  <meta charset="UTF-8">
+  <title>Users update form</title>
+</head>
+
+<body>
+
+<div class="topnav">
+  <a class="active" th:href="@{/homeBlogName}">Home</a>
+  <span sec:authorize="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')">
+        <a class="left" th:href="@{/createNewPost}">Create New Post</a>
+        </span>
+  <span sec:authorize="hasRole('ROLE_ADMIN')">
+        <a class="left" th:href="@{/users}">Users</a>
+        </span>
+  <span sec:authorize="isAuthenticated()">
+        <a class="right" th:href="@{/logout}">Logout</a>
+        </span>
+  <span sec:authorize="isAuthenticated()">
+            <a class="right">Welcome <span sec:authentication="name">name?</span></a>
+        </span>
+  <span sec:authorize="!isAuthenticated()">
+        <a class="right" th:href="@{/login}">Log In</a>
+        <a class="right" th:href="@{/signup}">Sign Up</a>
+        </span>
+</div>
+
+<form action="#" th:action="@{/saveUser}" th:object="${user}" method="POST">
+
+  <input type="text" th:field="*{username}" placeholder="Replace username">
+  <p th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></p>
+
+  <input type="hidden" th:field="*{password}" placeholder="Replace username" readonly>
+  <p th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></p>
+
+  <select th:field="*{authority.id}">
+    <option th:each="authority : ${authority}" th:value="${authority.id}" th:text="${authority.authority}"></option>
+  </select>
+
+
+  <input type="hidden" th:field="*{id}">
+
+  <button type="submit">Update</button>
+
+</form>
+
+</div>
+
+<footer th:replace="/fragments/footer :: footer"></footer>
+
+</body>
+</html>

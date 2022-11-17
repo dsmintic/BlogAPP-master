@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<header th:fragment="header">
+    <div class="topnav">
+        <a class="active" th:href="@{/homeBlogName}">Home</a>
+        <span sec:authorize="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')">
+        <a class="left" th:href="@{/createNewPost}">Create New Post</a>
+        </span>
+        <span sec:authorize="hasRole('ROLE_ADMIN')">
+        <a class="left" th:href="@{/users}">Users</a>
+        </span>
+        <span sec:authorize="isAuthenticated()">
+        <a class="right" th:href="@{/logout}">Logout</a>
+        </span>
+        <span sec:authorize="isAuthenticated()">
+            <a class="right">Welcome <span sec:authentication="name">name?</span></a>
+        </span>
+        <span sec:authorize="!isAuthenticated()">
+        <a class="right" th:href="@{/login}">Log In</a>
+        <a class="right" th:href="@{/signup}">Sign Up</a>
+        </span>
+    </div>
+
+    <div class="header">
+        <h2>Java Project Blog</h2>
+    </div>
+</header>
+
+</body>
+</html>

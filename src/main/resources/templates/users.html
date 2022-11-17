@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="/fragments/head :: head">
+    <meta charset="UTF-8">
+    <title>Users</title>
+
+</head>
+<body>
+<div class="topnav">
+    <a class="active" th:href="@{/homeBlogName}">Home</a>
+    <span sec:authorize="hasRole('ROLE_USER') or hasRole('ROLE_ADMIN')">
+        <a class="left" th:href="@{/createNewPost}">Create New Post</a>
+        </span>
+    <span sec:authorize="hasRole('ROLE_ADMIN')">
+        <a class="left" th:href="@{/users}">Users</a>
+        </span>
+    <span sec:authorize="isAuthenticated()">
+        <a class="right" th:href="@{/logout}">Logout</a>
+        </span>
+    <span sec:authorize="isAuthenticated()">
+            <a class="right">Welcome <span sec:authentication="name">name?</span></a>
+        </span>
+    <span sec:authorize="!isAuthenticated()">
+        <a class="right" th:href="@{/login}">Log In</a>
+        <a class="right" th:href="@{/signup}">Sign Up</a>
+        </span>
+</div>
+
+<H2>User managment system</H2>
+<table>
+    <thead>
+    <th>USERNAME |</th>
+    <th>ROLE |</th>
+    <th>ACTIONS</th>
+    <tbody>
+    <tr th:each="user : ${user}">
+        <td th:text="${user.username}"></td>
+        <td th:text="${user.authority.authority}"></td>
+        <td>
+            <a th:href="@{/userUpdate/{id}(id=${user.getId()})}">Update Role</a>
+        </td>
+    </tr>
+    </tbody>
+    </thead>
+</table>
+
+<footer th:replace="/fragments/footer :: footer"></footer>
+</body>
+
+</html>

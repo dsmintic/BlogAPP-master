@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+
+<head th:replace="/fragments/head :: head"></head>
+
+<body>
+
+<div th:replace="/fragments/header :: header"></div>
+
+<div class="container">
+
+  <div th:replace="/fragments/posts :: posts(posts=${posts})"></div>
+
+</div>
+<hr>
+
+<a href="#top">
+
+  <button class="green-btn purple-btn" type="button">Back to top of page</button>
+
+</a>
+
+<hr>
+
+<footer th:replace="/fragments/footer :: footer"></footer>
+
+</body>
+</html>

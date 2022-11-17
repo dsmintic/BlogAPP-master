@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+<head th:replace="/fragments/head :: head"></head>
+
+<body>
+<div th:replace="/fragments/header :: header"></div>
+
+<div class="container">
+  <div class="post">
+    <h2 th:text="${post.title}">Title</h2>
+    <h5 th:text="'Published on ' + ${#dates.format(post.creationDate, 'yyyy MMMM dd')} + ' by ' + ${post.user.username}">Creation date and by whom</h5>
+    <p th:text="${post.text}">body text</p>
+
+    <div class="align-right" sec:authorize="isAuthenticated()" th:if="${owner}">
+      <a th:href="@{'/editPost/{id}'(id=${post.id})}">
+        <button class="green-btn blue-btn" type="button">Edit</button>
+      </a>
+    </div>
+
+    <div class="align-right" sec:authorize="isAuthenticated() and hasRole('ROLE_ADMIN')"  th:unless="${owner}">
+      <a th:href="@{'/editPost/{id}'(id=${post.id})}">
+        <button class="green-btn blue-btn" type="button">Edit</button>
+      </a>
+    </div>
+
+  </div>
+  <div class="comments">
+    <h2>Comments</h2>
+    <div class="comment" th:each="comment : ${post.comments}">
+      <h5 th:text="'Commented on ' + ${#dates.format(post.creationDate, 'yyyy-MM-dd')} + ' by ' + ${comment.user.username}">Comment date and by whom</h5>
+      <p th:text="${comment.text}">Body</p>
+
+
+
+
+      <div class="align-right" sec:authorize="isAuthenticated()" th:if="${comment.user.username.equals(userLogIn)}" >
+        <a th:data-confirm-delete="|Are you sure you want to delete this comment ${comment}?|"
+           onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false"
+                th:href="@{/deleteComment/{id}(id=${comment.id})}">
+          <button class="green-btn red-btn" type="button">Delete Comment</button>
+        </a>
+      </div>
+
+      <div class="align-right" sec:authorize="isAuthenticated() and hasRole('ROLE_ADMIN')"  th:unless="${comment.user.username.equals(userLogIn)}">
+        <a th:data-confirm-delete="|Are you sure you want to delete this comment ${comment}?|"
+           onclick="if (!confirm(this.getAttribute('data-confirm-delete'))) return false"
+                th:href="@{'/deleteComment/{id}'(id=${comment.id})}">
+          <button class="green-btn red-btn" type="button">Delete Comment</button>
+        </a>
+      </div>
+
+    </div>
+  </div>
+  <div class="align-center">
+    <a th:href="@{'/comment/{id}'(id=${post.id})}">
+      <button class="green-btn" type="button">Comment Post</button>
+    </a>
+  </div>
+</div>
+<hr>
+
+<a href="#top">
+
+  <button class="green-btn purple-btn" type="button">Back to top of page</button>
+
+</a>
+
+<a th:href="@{/homeBlogName}" align="right">
+
+  <button class="green-btn purple-btn" type="button" style="float: right;">Back to Post List</button>
+
+</a>
+
+<hr>
+<footer th:replace="/fragments/footer :: footer"></footer>
+
+</body>
+</html>
